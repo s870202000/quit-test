@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>【VOGUE 職涯評鑑】重塑你的職涯邊際</title>
     
-    <!-- 引入 Google Fonts: 時尚雜誌必備字體組合 -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@300;400;600&family=Noto+Serif+TC:wght@700&family=Noto+Sans+TC:wght@300;400&display=swap" rel="stylesheet">
 
     <style>
@@ -18,7 +17,6 @@
             --font-body: 'Montserrat', 'Noto Sans TC', sans-serif;
         }
 
-        /* 全域重置與 Vogue 字體設定 */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
@@ -36,7 +34,6 @@
             padding: 40px 20px;
         }
 
-        /* 標題設計：Vogue 時尚風格 */
         h1, h2, h3 {
             font-family: var(--font-vogue);
             font-style: italic;
@@ -45,14 +42,11 @@
             text-transform: uppercase;
         }
 
-        /* 首頁 Hero 區塊：極致奢華感 */
         .hero-section {
             background: linear-gradient(135deg, #0F172A 0%, #1a2744 100%);
             color: white;
-            border-radius: 0; /* 時尚雜誌常使用方正線條 */
             padding: 100px 40px;
             text-align: center;
-            position: relative;
             box-shadow: 0 20px 50px rgba(0,0,0,0.2);
             margin-bottom: 50px;
         }
@@ -74,7 +68,6 @@
             margin-bottom: 40px;
         }
 
-        /* 按鈕設計：精品官網風格 */
         .btn-vogue {
             background: none;
             border: 1px solid var(--accent);
@@ -95,7 +88,6 @@
             box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
         }
 
-        /* 測驗卡片設計 */
         .quiz-card {
             background: white;
             padding: 50px 40px;
@@ -124,47 +116,14 @@
             padding-left: 25px;
         }
 
-        /* 結果頁報告：Vogue 專欄風格 */
-        .report-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
+        .report-header { text-align: center; margin-bottom: 60px; }
+        .score-circle { font-size: 80px; font-family: var(--font-vogue); color: var(--accent); margin: 20px 0; font-weight: 700; }
+        
+        .dimension-bar-container { margin-bottom: 25px; }
+        .dimension-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; display: flex; justify-content: space-between; }
+        .bar-bg { height: 4px; background: #edf2f7; width: 100%; position: relative; }
+        .bar-fill { height: 100%; background: var(--accent); transition: width 1.5s ease; }
 
-        .score-circle {
-            font-size: 80px;
-            font-family: var(--font-vogue);
-            color: var(--accent);
-            margin: 20px 0;
-            font-weight: 700;
-        }
-
-        .dimension-bar-container {
-            margin-bottom: 25px;
-        }
-
-        .dimension-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .bar-bg {
-            height: 4px;
-            background: #edf2f7;
-            width: 100%;
-            position: relative;
-        }
-
-        .bar-fill {
-            height: 100%;
-            background: var(--accent);
-            transition: width 1.5s ease;
-        }
-
-        /* 黑卡 VIP 諮詢區 */
         .vip-invite {
             background: var(--primary);
             border: 1px solid var(--accent);
@@ -175,45 +134,30 @@
             position: relative;
         }
 
-        .vip-invite::before {
-            content: "ELITE ONLY";
-            position: absolute;
-            top: 15px;
-            left: 20px;
-            font-size: 10px;
-            letter-spacing: 5px;
-            color: rgba(197, 160, 89, 0.4);
-        }
-
-        /* 隱藏與顯示邏輯 */
         .view-section { display: none; }
         .view-section.active { display: block; }
-
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- View 1: Welcome -->
     <div id="view-welcome" class="view-section active">
         <div class="hero-section">
             <div class="hero-sub">Executive Career Assessment</div>
             <h1 class="hero-title">重塑你的職涯邊際</h1>
-            <p style="margin-bottom: 40px; color: rgba(255,255,255,0.6)">這不只是測驗，而是一場關於職場價值的深度審視。<br>基於12項核心指標，為您的下一步精準導航。</p>
             <button class="btn-vogue" onclick="startQuiz()">開啟專屬評鑑</button>
         </div>
     </div>
 
-    <!-- View 2: Quiz -->
     <div id="view-quiz" class="view-section">
         <div id="progress-text" style="text-transform: uppercase; letter-spacing: 3px; font-size: 12px; color: var(--accent); margin-bottom: 10px;">Indicator 01/12</div>
         <div class="quiz-card">
-            <h2 id="question-text" style="margin-bottom: 30px; font-style: normal; text-transform: none;">載入題目中...</h2>
+            <h2 id="question-text" style="margin-bottom: 30px; font-style: normal;">載入題目中...</h2>
             <div id="options-container"></div>
+            <button id="prev-btn" style="background:none; border:none; color:#a0aec0; cursor:pointer; font-size:12px; text-decoration:underline; margin-top:20px; display:none;" onclick="prevQuestion()">上一題 PREVIOUS</button>
         </div>
     </div>
 
-    <!-- View 3: Result -->
     <div id="view-result" class="view-section">
         <div class="report-header">
             <h3 style="font-style: normal; letter-spacing: 5px;">Career Health Index</h3>
@@ -221,15 +165,11 @@
             <p id="result-status" style="text-transform: uppercase; letter-spacing: 3px; font-weight: 600;"></p>
             <p id="result-desc" style="margin-top: 20px; max-width: 500px; margin-left: auto; margin-right: auto;"></p>
         </div>
-
         <div id="dimension-analysis"></div>
-
         <div class="vip-invite">
             <h2 style="color: var(--accent); margin-bottom: 20px;">專屬職涯顧問晤談</h2>
-            <p style="margin-bottom: 30px; font-weight: 300;">頂尖人才值得最專屬的對待。加入我們的私人人才庫，獲取最稀缺的高階機遇。</p>
             <button class="btn-vogue" style="background: var(--accent); color: var(--primary);" onclick="window.location.href='https://lin.ee/xxxxxxxxxx'">啟動首次免費評估</button>
         </div>
-        
         <p style="text-align: center; margin-top: 40px;">
             <a href="javascript:location.reload()" style="color: #a0aec0; text-decoration: none; font-size: 12px; letter-spacing: 2px;">重新執行評鑑 RE-ASSESSMENT</a>
         </p>
@@ -238,18 +178,18 @@
 
 <script>
     const questions = [
-        { q: "你對目前的薪資待遇滿意嗎？", d: "金錢回報" },
-        { q: "如果半年不工作，你的存款能維持生活嗎？", d: "金錢回報" },
-        { q: "這份工作讓你學到新技能嗎？", d: "發展前景" },
-        { q: "你在公司的升遷管道暢通嗎？", d: "發展前景" },
-        { q: "你在市場上的競爭力如何？", d: "發展前景" },
-        { q: "你和直屬主管的相處如何？", d: "人際關係" },
-        { q: "公司同事願意互相支持嗎？", d: "人際關係" },
-        { q: "你在公司的存在感和認同感如何？", d: "人際關係" },
-        { q: "你認為這份工作有意義嗎？", d: "工作意義" },
-        { q: "你的價值觀和公司文化契合嗎？", d: "工作意義" },
-        { q: "回顧近一個月，工作是否讓你感到焦慮或沮喪？", d: "身心健康" },
-        { q: "工作是否已經影響到你的睡眠或生活品質？", d: "身心健康" }
+        { q: "你對目前的薪資待遇滿意嗎？", d: "金錢回報", type: "pos" },
+        { q: "如果半年不工作，你的存款能維持生活嗎？", d: "金錢回報", type: "pos" },
+        { q: "這份工作讓你學到新技能嗎？", d: "發展前景", type: "pos" },
+        { q: "你在公司的升遷管道暢通嗎？", d: "發展前景", type: "pos" },
+        { q: "你在市場上的競爭力如何？", d: "發展前景", type: "pos" },
+        { q: "你和直屬主管的相處如何？", d: "人際關係", type: "pos" },
+        { q: "公司同事願意互相支持嗎？", d: "人際關係", type: "pos" },
+        { q: "你在公司的存在感和認同感如何？", d: "人際關係", type: "pos" },
+        { q: "你認為這份工作有意義嗎？", d: "工作意義", type: "pos" },
+        { q: "你的價值觀和公司文化契合嗎？", d: "工作意義", type: "pos" },
+        { q: "回顧近一個月，工作是否讓你感到焦慮或沮喪？", d: "身心健康", type: "neg" },
+        { q: "工作是否已經影響到你的睡眠或生活品質？", d: "身心健康", type: "neg" }
     ];
 
     let currentStep = 0;
@@ -265,11 +205,19 @@
         const q = questions[currentStep];
         document.getElementById('progress-text').innerText = `Indicator ${String(currentStep + 1).padStart(2, '0')}/12`;
         document.getElementById('question-text').innerText = q.q;
+        document.getElementById('prev-btn').style.display = currentStep > 0 ? 'block' : 'none';
         
         const container = document.getElementById('options-container');
         container.innerHTML = '';
         
-        const opts = ["5分：非常滿意 / 完全同意", "4分：滿意 / 同意", "3分：普通 / 中立", "2分：不滿意 / 不同意", "1分：非常不滿意 / 完全不同意"];
+        // 核心邏輯修正：針對 Q11/12 (neg 類型) 調整選項文字
+        let opts = [];
+        if (q.type === "pos") {
+            opts = ["5分：非常滿意 / 完全同意", "4分：滿意 / 同意", "3分：普通 / 中立", "2分：不滿意 / 不同意", "1分：非常不滿意 / 完全不同意"];
+        } else {
+            opts = ["5分：完全沒影響 / 完全不焦慮", "4分：影響很輕微 / 偶爾焦慮", "3分：普通 / 中立", "2分：影響明顯 / 經常焦慮", "1分：影響極其嚴重 / 嚴重焦慮"];
+        }
+
         opts.forEach((text, i) => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
@@ -280,22 +228,21 @@
     }
 
     function nextStep(score) {
-        answers.push(score);
+        answers[currentStep] = score;
         currentStep++;
-        if (currentStep < questions.length) {
-            showQuestion();
-        } else {
-            showResult();
-        }
+        if (currentStep < questions.length) { showQuestion(); } else { showResult(); }
+    }
+
+    function prevQuestion() {
+        currentStep--;
+        showQuestion();
     }
 
     function showResult() {
         document.getElementById('view-quiz').classList.remove('active');
         document.getElementById('view-result').classList.add('active');
-        
         const totalRaw = answers.reduce((a, b) => a + b, 0);
         const finalScore = Math.round((totalRaw / 60) * 100);
-        
         document.getElementById('total-score').innerText = finalScore;
         
         let status = "";
@@ -309,31 +256,4 @@
         document.getElementById('result-status').innerText = status;
         document.getElementById('result-desc').innerText = desc;
 
-        // 維度分析顯示
-        const dimensions = ["金錢回報", "發展前景", "人際關係", "工作意義", "身心健康"];
-        const dScores = [
-            (answers[0]+answers[1]), 
-            (answers[2]+answers[3]+answers[4]),
-            (answers[5]+answers[6]+answers[7]),
-            (answers[8]+answers[9]),
-            (answers[10]+answers[11])
-        ];
-        const dMax = [10, 15, 15, 10, 10];
-        
-        const analysisContainer = document.getElementById('dimension-analysis');
-        analysisContainer.innerHTML = '<h4 style="margin-bottom:30px; text-align:center; letter-spacing:3px;">DIMENSIONAL ANALYSIS</h4>';
-        
-        dimensions.forEach((d, i) => {
-            const pct = Math.round((dScores[i] / dMax[i]) * 100);
-            analysisContainer.innerHTML += `
-                <div class="dimension-bar-container">
-                    <div class="dimension-label"><span>${d}</span><span>${pct}%</span></div>
-                    <div class="bar-bg"><div class="bar-fill" style="width: ${pct}%"></div></div>
-                </div>
-            `;
-        });
-    }
-</script>
-
-</body>
-</html>
+        const dimensions =<span class="cursor">█</span>
