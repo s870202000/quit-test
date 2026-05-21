@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>「你該離職了嗎？」- 專業HR評估系統</title>
+    <style>
+      /* Base Reset & Core Styles */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        max-width: 880px;
+        margin: 0 auto;
+        padding: 32px 80px;
+        position: relative;
+        font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+        background-color: #f8fafc !important;
+        color: #333333 !important;
+        line-height: 1.6;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: 'Noto Serif TC', 'PMingLiU', serif;
+        color: #0f172a !important;
+        margin-bottom: 0.8em;
+      }
+
+      button {
+        font-family: inherit;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        background: none;
+      }
+
+      /* View Visibility */
+      .view-section {
+        display: none;
+      }
+      .view-section.active {
+        display: block;
+        animation: fadeIn 0.4s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* --- Hero Section --- */
+      #view-hero {
+        background-color: #0f172a !important;
+        border-radius: 16px;
+        padding: 60px 40px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+      }
+      .hero-title {
+        color: #c5a059 !important;
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+      .hero-subtitle {
+        font-size: 18px;
+        color: #f8fafc !important;
+        margin-bottom: 24px;
+        opacity: 0.9;
+      }
+      .hero-info {
+        font-size: 14px;
+        color: #64748b;
+        margin-bottom: 40px;
+      }
+      .btn-gold {
+        background-color: #c5a059 !important;
+        color: #0f172a !important;
+        padding: 16px 40px;
+        font-size: 18px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-family: 'Noto Serif TC', 'PMingLiU', serif;
+      }
+
+      /* --- Quiz Section --- */
+      .quiz-card {
+        background-color: #ffffff !important;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
+      .progress-container {
+        margin-bottom: 30px;
+      }
+      .progress-bar-bg {
+        height: 4px;
+        background-color: #e2e8f0;
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .progress-bar-fill {
+        height: 100%;
+        background-color: #c5a059 !important;
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+      .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+      }
+      .progress-text {
+        font-size: 14px;
+        color: #64748b;
+        font-weight: bold;
+      }
+      .dim-badge {
+        background-color: #0f172a !important;
+        color: #c5a059 !important;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .question-title {
+        font-size: 22px;
+        margin-bottom: 30px;
+      }
+      .options-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .option-btn {
+        border: 1px solid #cbd5e1;
+        padding: 16px 24px;
+        border-radius: 6px;
+        text-align: left;
+        color: #333333;
+        transition: all 0.2s ease;
+      }
+      .option-btn.selected {
+        border-color: #c5a059 !important;
+        border-left: 6px solid #c5a059 !important;
+        background-color: rgba(197, 160, 89, 0.05) !important;
+        font-weight: bold;
+      }
+      .quiz-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+      }
+      .btn-outline {
+        border: 1px solid #cbd5e1;
+        color: #64748b;
+        padding: 10px 24px;
+        border-radius: 4px;
+      }
+
+      /* --- Results Section --- */
+      .result-header {
+        background-color: #0f172a !important;
+        border-radius: 16px;
+        padding: 40px;
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .result-header h2 {
+        color: #c5a059 !important;
+        margin-bottom: 4px;
+        font-size: 28px;
+      }
+      .result-subtitle {
+        color: #f8fafc !important;
+        font-size: 14px;
+        opacity: 0.8;
+        margin-bottom: 30px;
+        letter-spacing: 1px;
+      }
+      .score-container {
+        position: relative;
+        width: 160px;
+        height: 160px;
+        margin: 0 auto 24px;
+      }
+      .score-circle {
+        transform: rotate(-90deg);
+        width: 160px;
+        height: 160px;
+      }
+      .score-circle-bg {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.1);
+        stroke-width: 8;
+      }
+      .score-circle-fg {
+        fill: none;
+        stroke: #c5a059 !important;
+        stroke-width: 8;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 1s ease-out;
+      }
+      .score-number {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 48px;
+        font-weight: 700;
+        color: #c5a059 !important;
+        font-family: 'Noto Serif TC', serif;
+      }
+      .level-badge {
+        display: inline-block;
+        padding: 6px 20px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 16px;
+        color: #ffffff !important;
+      }
+      .level-desc {
+        color: #f8fafc !important;
+        font-size: 15px;
+        max-width: 500px;
+        margin: 0 auto 20px;
+        opacity: 0.9;
+      }
+      .scoring-note {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-left: 3px solid #c5a059 !important;
+        padding: 12px;
+        font-size: 13px;
+        color: #f8fafc !important;
+        text-align: left;
+        border-radius: 4px;
+        opacity: 0.8;
+      }
+
+      .section-title {
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 8px;
+        margin-bottom: 24px;
+        font-size: 20px;
+        color: #0f172a !important;
+      }
+
+      /* Radar Chart */
+      .radar-container {
+        text-align: center;
+        margin: 40px 0;
+      }
+
+      /* Dimensions Detail */
+      .dim-card {
+        background-color: #ffffff !important;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        border: 1px solid #e2e8f0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .dim-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .dim-title {
+        font-weight: bold;
+        color: #0f172a !important;
+        font-size: 16px;
+        margin-bottom: 0;
+      }
+      .dim-score {
+        font-size: 14px;
+        font-weight: bold;
+        padding: 2px 8px;
+        border-radius: 4px;
+        color: #ffffff !important;
+      }
+      .dim-desc {
+        font-size: 14px;
+        color: #64748b;
+      }
+
+      .priority-badge {
+        background-color: #c0392b !important;
+        color: white !important;
+        font-size: 12px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: 8px;
+        vertical-align: middle;
+      }
+
+      /* Risk Assessment */
+      .risk-box {
+        background-color: #ffffff !important;
+        border-left: 4px solid #c0392b !important;
+        padding: 20px;
+        border-radius: 4px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+        margin-bottom: 40px;
+      }
+      .risk-title {
+        color: #c0392b !important;
+        font-weight: bold;
+        margin-bottom: 8px;
+        font-size: 16px;
+      }
+
+      /* Action Plans Timeline */
+      .action-timeline {
+        border-left: 2px solid #c5a059 !important;
+        margin-left: 10px;
+        padding-left: 24px;
+        margin-bottom: 40px;
+      }
+      .action-item {
+        position: relative;
+        margin-bottom: 24px;
+      }
+      .action-item::before {
+        content: '';
+        position: absolute;
+        left: -31px;
+        top: 4px;
+        width: 12px;
+        height: 12px;
+        background-color: #c5a059 !important;
+        border-radius: 50%;
+      }
+      .action-time {
+        font-weight: bold;
+        color: #0f172a !important;
+        margin-bottom: 4px;
+      }
+      .action-desc {
+        font-size: 14px;
+        color: #333333;
+      }
+
+      /* Black Card LINE CTA */
+      .blackcard-cta {
+        background-color: #0f172a !important;
+        border: 1px solid #c5a059 !important;
+        border-radius: 12px;
+        padding: 40px 30px;
+        text-align: center;
+        position: relative;
+        margin-bottom: 30px;
+      }
+      .blackcard-cta::after {
+        content: '';
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        right: 6px;
+        bottom: 6px;
+        border: 1px dashed rgba(197, 160, 89, 0.4) !important;
+        border-radius: 8px;
+        pointer-events: none;
+      }
+      .cta-title {
+        color: #c5a059 !important;
+        font-family: 'Noto Serif TC', serif;
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+      .cta-subtitle {
+        color: #f8fafc !important;
+        font-size: 14px;
+        margin-bottom: 24px;
+        opacity: 0.8;
+      }
+      .cta-services {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+        margin-bottom: 32px;
+      }
+      .cta-service-item {
+        color: #f8fafc !important;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .cta-service-item::before {
+        content: '◆';
+        color: #c5a059 !important;
+        font-size: 10px;
+      }
+      .btn-line {
+        background-color: #c5a059 !important;
+        color: #0f172a !important;
+        padding: 14px 32px;
+        border-radius: 4px;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-block;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* Restart Link */
+      .restart-wrapper {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .restart-link {
+        color: #64748b;
+        font-size: 14px;
+        text-decoration: none;
+        border-bottom: 1px solid #64748b;
+        padding-bottom: 2px;
+        cursor: pointer;
+      }
+
+      /* RWD */
+      @media (max-width: 768px) {
+        body {
+          padding: 24px 20px;
+        }
+        .hero-title {
+          font-size: 28px;
+        }
+        .hero-card {
+          padding: 40px 20px;
+        }
+        .quiz-card {
+          padding: 24px 16px;
+        }
+        .result-header {
+          padding: 30px 16px;
+        }
+        .score-container {
+          width: 120px;
+          height: 120px;
+        }
+        .score-circle {
+          width: 120px;
+          height: 120px;
+        }
+        .score-number {
+          font-size: 36px;
+        }
+        .cta-services {
+          flex-direction: column;
+          gap: 8px;
+          text-align: left;
+          align-items: flex-start;
+          margin: 0 auto 24px;
+          width: fit-content;
+        }
+      }
+      @media (max-width: 480px) {
+        body {
+          padding: 16px 12px;
+        }
+        .question-title {
+          font-size: 18px;
+        }
+        .option-btn {
+          font-size: 14px;
+          padding: 12px 16px;
+        }
+        .cta-title {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- VIEW: HERO -->
+    <div id="view-hero" class="view-section active">
+      <div class="hero-card">
+        <h1 class="hero-title">重塑你的職涯下半場</h1>
+        <div class="hero-subtitle">專業 HR 評估系統</div>
+        <div class="hero-info">深度檢測：12 道核心指標 × 5 大關鍵維度 × 100 分制</div>
+        <button class="btn-gold" onclick="startQuiz()">開始專業評鑑</button>
+      </div>
+    </div>
+
+    <!-- VIEW: QUIZ -->
+    <div id="view-quiz" class="view-section">
+      <div class="quiz-card">
+        <div class="progress-container">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+          </div>
+          <div class="progress-header">
+            <div class="dim-badge" id="dim-badge">維度</div>
+            <div class="progress-text" id="progress-text">指標 01 / 12</div>
+          </div>
+        </div>
+
+        <h2 class="question-title" id="question-text">載入中...</h2>
+
+        <div class="options-grid" id="options-container">
+          <!-- Options injected by JS -->
+        </div>
+
+        <div class="quiz-nav">
+          <button class="btn-outline" id="btn-prev" onclick="prevQuestion()" style="visibility: hidden">上一題</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW: RESULTS -->
+    <div id="view-results" class="view-section">
+      <!-- Top Card -->
+      <div class="result-header">
+        <h2>職涯健康指數</h2>
+        <div class="result-subtitle">Career Health Index</div>
+
+        <div class="score-container">
+          <svg class="score-circle" viewBox="0 0 100 100">
+            <circle class="score-circle-bg" cx="50" cy="50" r="45"></circle>
+            <circle
+              class="score-circle-fg"
+              id="score-arc"
+              cx="50"
+              cy="50"
+              r="45"
+              stroke-dasharray="283"
+              stroke-dashoffset="283"
+            ></circle>
+          </svg>
+          <div class="score-number" id="total-score-text">0</div>
+        </div>
+
+        <div class="level-badge" id="level-badge" style="background-color: #64748b">評估中</div>
+        <div class="level-desc" id="level-desc">正在計算您的專屬報告...</div>
+
+        <div class="scoring-note">
+          <strong>💡 評分導向說明：</strong><br />
+          分數越低代表不滿意程度越高、痛點越多，需要盡快採取行動；分數越高代表滿意度與狀態越健康。
+        </div>
+      </div>
+
+      <!-- Radar Chart -->
+      <h3 class="section-title">五大維度深度解析</h3>
+      <div class="radar-container" id="radar-container"></div>
+
+      <!-- Dimensions Diagnosis -->
+      <h3 class="section-title">現狀診斷</h3>
+      <div id="dimensions-container" style="margin-bottom: 40px"></div>
+
+      <!-- Risk Assessment -->
+      <h3 class="section-title">風險評估</h3>
+      <div class="risk-box" id="priority-container"></div>
+
+      <!-- Strategy Timeline -->
+      <h3 class="section-title">優化策略</h3>
+      <div class="action-timeline" id="timeline-container"></div>
+
+      <!-- Black Card CTA -->
+      <div class="blackcard-cta">
+        <h3 class="cta-title">聊聊吧，關於你的下一個階段。</h3>
+        <div class="cta-subtitle">專業 HR 顧問 / 一對一深度對話</div>
+        <div class="cta-services">
+          <div class="cta-service-item">履歷健檢與優化</div>
+          <div class="cta-service-item">面試策略指導</div>
+          <div class="cta-service-item">職涯方向諮詢</div>
+          <div class="cta-service-item">市場價值分析</div>
+        </div>
+        <a href="https://lin.ee/xxxxxxxxxx" class="btn-line">立即預約諮詢</a>
+      </div>
+
+      <!-- Restart -->
+      <div class="restart-wrapper">
+        <button class="restart-link" onclick="restartQuiz()">重新執行評鑑</button>
+      </div>
+    </div>
+
+    <script>
+      // --- Data ---
+      const dimensionsData = {
+        financial: { id: 'financial', name: '金錢回報', qs: [0, 1] },
+        development: { id: 'development', name: '發展前景', qs: [2, 3, 4] },
+        relationship: { id: 'relationship', name: '人際關係', qs: [5, 6, 7] },
+        meaning: { id: 'meaning', name: '工作意義', qs: [8, 9] },
+        health: { id: 'health', name: '身心健康', qs: [10, 11] },
+      };
+
+      const questionsData = [
+        { dim: 'financial', text: '你對目前的薪資待遇滿意嗎？' },
+        { dim: 'financial', text: '如果半年不工作，你的存款能維持生活嗎？' },
+        { dim: 'development', text: '這份工作讓你學到新技能嗎？' },
+        { dim: 'development', text: '你在公司的升遷管道暢通嗎？' },
+        { dim: 'development', text: '你在市場上的競爭力如何？' },
+        { dim: 'relationship', text: '你和直屬主管的相處如何？' },
+        { dim: 'relationship', text: '公司同事願意互相支持嗎？' },
+        { dim: 'relationship', text: '你在公司的存在感和認同感如何？' },
+        { dim: 'meaning', text: '你認為這份工作有意義嗎？' },
+        { dim: 'meaning', text: '你的價值觀和公司文化契合嗎？' },
+        { dim: 'health', text: '回顧近一個月，工作是否讓你感到焦慮或沮喪？（5分 = 完全不焦慮）' },
+        { dim: 'health', text: '工作是否已經影響到你的睡眠、健康或生活品質？（5分 = 完全無影響）' },
+      ];
+
+      const optionsData = [
+        { score: 5, text: '5分：非常滿意 / 完全同意' },
+        { score: 4, text: '4分：滿意 / 同意' },
+        { score: 3, text: '3分：普通 / 中立' },
+        { score: 2, text: '2分：不滿意 / 不同意' },
+        { score: 1, text: '1分：非常不滿意 / 完全不同意' },
+      ];
+
+      const STORAGE_KEY = 'hr_quiz_minimal_premium';
+      let currentQ = 0;
+      let answers = new Array(12).fill(null);
+
+      // --- Logic ---
+      function startQuiz() {
+        document.getElementById('view-hero').classList.remove('active');
+        document.getElementById('view-quiz').classList.add('active');
+
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          try {
+            answers = JSON.parse(saved);
+            currentQ = answers.findIndex((a) => a === null);
+            if (currentQ === -1) {
+              calculateResults();
+              return;
+            }
+          } catch (e) {
+            answers = new Array(12).fill(null);
+            currentQ = 0;
+          }
+        }
+        renderQuestion();
+      }
+
+      function renderQuestion() {
+        const q = questionsData[currentQ];
+        const dim = dimensionsData[q.dim];
+
+        // Progress
+        const pct = (currentQ / 12) * 100;
+        document.getElementById('progress-bar').style.width = pct + '%';
+        const qNum = (currentQ + 1).toString().padStart(2, '0');
+        document.getElementById('progress-text').innerText = `指標 ${qNum} / 12`;
+        document.getElementById('dim-badge').innerText = dim.name;
+        document.getElementById('question-text').innerText = q.text;
+
+        // Options
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+
+        optionsData.forEach((opt) => {
+          const btn = document.createElement('button');
+          btn.className = 'option-btn';
+          btn.innerText = opt.text;
+
+          let displayScore = answers[currentQ];
+          if (displayScore !== null && (currentQ === 10 || currentQ === 11)) {
+            displayScore = 6 - displayScore;
+          }
+
+          if (displayScore === opt.score) {
+            btn.classList.add('selected');
+          }
+
+          btn.onclick = (e) => selectAnswer(opt.score, e.target);
+          container.appendChild(btn);
+        });
+
+        document.getElementById('btn-prev').style.visibility = currentQ > 0 ? 'visible' : 'hidden';
+      }
+
+      function selectAnswer(score, targetEl) {
+        let finalScore = score;
+        if (currentQ === 10 || currentQ === 11) {
+          finalScore = 6 - score; // Reverse scoring
+        }
+        answers[currentQ] = finalScore;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
+
+        const btns = document.querySelectorAll('.option-btn');
+        btns.forEach((b) => b.classList.remove('selected'));
+        targetEl.classList.add('selected');
+
+        setTimeout(() => {
+          if (currentQ < 11) {
+            currentQ++;
+            renderQuestion();
+          } else {
+            calculateResults();
+          }
+        }, 300);
+      }
+
+      function prevQuestion() {
+        if (currentQ > 0) {
+          currentQ--;
+          renderQuestion();
+        }
+      }
+
+      // --- Scoring & Levels ---
+      function getLevelInfo(score100) {
+        if (score100 <= 33)
+          return {
+            id: 1,
+            title: '🚨 立即行動',
+            color: '#C0392B',
+            desc: '環境已對身心與職涯發展造成實質阻礙，建議立即啟動外部機會探索，設立明確的停損機制。',
+          };
+        if (score100 <= 46)
+          return {
+            id: 2,
+            title: '⚠️ 警鈴響起',
+            color: '#E67E22',
+            desc: '多項核心指標亮起紅燈。請展開市場價值盤點，同時嘗試與現有組織進行痛點溝通，為去留做出理性評估。',
+          };
+        if (score100 <= 60)
+          return {
+            id: 3,
+            title: '🟡 紅黃燈',
+            color: '#F39C12',
+            desc: '您正處於職涯的灰色觀察期。建議設立 3 個月的戰略觀察點，主動介入改善核心痛點。',
+          };
+        if (score100 <= 73)
+          return {
+            id: 4,
+            title: '🟢 黃綠燈',
+            color: '#27AE60',
+            desc: '整體狀態穩健，具備良好的發展基礎。建議您在發揮既有優勢的同時，針對弱勢維度進行精準優化。',
+          };
+        return {
+          id: 5,
+          title: '✅ 綠燈暢行',
+          color: '#1F9D55',
+          desc: '卓越的職場健康度。環境能充分賦能個人發展，建議深耕當前領域，擴大影響力。',
+        };
+      }
+
+      function getDimLevel(pct) {
+        if (pct <= 33) return { label: '緊急', color: '#C0392B' };
+        if (pct <= 46) return { label: '關注', color: '#E67E22' };
+        if (pct <= 60) return { label: '觀察', color: '#F39C12' };
+        if (pct <= 73) return { label: '穩定', color: '#27AE60' };
+        return { label: '優秀', color: '#1F9D55' };
+      }
+
+      function calculateResults() {
+        document.getElementById('view-quiz').classList.remove('active');
+        document.getElementById('view-results').classList.add('active');
+
+        const rawTotal = answers.reduce((a, b) => a + b, 0);
+        const score100 = Math.round((rawTotal / 60) * 100);
+        const level = getLevelInfo(score100);
+
+        document.getElementById('total-score-text').innerText = score100;
+        const badge = document.getElementById('level-badge');
+        badge.innerText = level.title;
+        badge.style.backgroundColor = level.color;
+        document.getElementById('level-desc').innerText = level.desc;
+
+        const arc = document.getElementById('score-arc');
+        const circumference = 2 * Math.PI * 45; // ~282.7
+        const offset = circumference - (score100 / 100) * circumference;
+        setTimeout(() => {
+          arc.style.strokeDashoffset = offset;
+        }, 100);
+
+        // Dimension Calculations
+        const dimScores = {};
+        for (let key in dimensionsData) {
+          const dim = dimensionsData[key];
+          let sum = 0;
+          dim.qs.forEach((idx) => (sum += answers[idx]));
+          const maxRaw = dim.qs.length * 5;
+          dimScores[key] = Math.round((sum / maxRaw) * 100);
+        }
+
+        renderRadarChart(dimScores);
+
+        // Sort Dimensions (Lowest to Highest)
+        const sortedDims = Object.keys(dimScores)
+          .map((k) => ({ key: k, name: dimensionsData[k].name, score: dimScores[k] }))
+          .sort((a, b) => a.score - b.score);
+
+        // Render Dimensions Diagnosis
+        let dimsHtml = '';
+        sortedDims.forEach((d, idx) => {
+          const dLevel = getDimLevel(d.score);
+          let advice =
+            d.score >= 74
+              ? '該維度表現優異，是支撐你目前職涯的關鍵動力。'
+              : d.score >= 47
+                ? '尚有優化空間，建議主動尋求資源改善現狀。'
+                : '此為核心痛點，強烈建議列入首要改善或評估轉換環境的指標。';
+          let priorityTag = idx === 0 ? `<span class="priority-badge">首要改善</span>` : '';
+
+          dimsHtml += `
+          <div class="dim-card">
+            <div class="dim-header">
+              <h4 class="dim-title">${d.name} ${priorityTag}</h4>
+              <span class="dim-score" style="background-color: ${dLevel.color} !important;">${d.score}% | ${dLevel.label}</span>
+            </div>
+            <div class="dim-desc">${advice}</div>
+          </div>
+        `;
+        });
+        document.getElementById('dimensions-container').innerHTML = dimsHtml;
+
+        // Risk Assessment
+        const worst = sortedDims[0];
+        document.getElementById('priority-container').innerHTML = `
+        <div class="risk-title">首要風險指標：${worst.name}</div>
+        <div style="font-size:14px; color:#333;">此維度目前僅獲得 ${worst.score}%，是拉低整體職場健康度的主要原因。若短期內無法透過內部溝通解決，這將成為促使您轉換跑道的核心推力。</div>
+      `;
+
+        // Timeline Plans
+        const plans = {
+          1: [
+            { time: '1個月內', text: '現況盤點與談判準備。更新個人履歷，明確列出現階段最無法忍受的痛點。' },
+            { time: '3個月內', text: '市場測試與人脈經營。密集參與面試，了解自身在就業市場的真實身價。' },
+            { time: '6個月內', text: '完成轉職。設定停損點，確保備用金充足，保護身心健康優先。' },
+          ],
+          2: [
+            { time: '1個月內', text: '測試外部市場水溫，同步釐清內部問題的「可解性」。' },
+            { time: '3個月內', text: '尋求與高層或決策者的深度對話，爭取核心痛點的改善空間。' },
+            { time: '6個月內', text: '依據內部反饋與外部面試回饋，執行理性的去留決策。' },
+          ],
+          3: [
+            { time: '1個月內', text: '量化您的工作痛點，制定一套向內部提案的「優化企劃」。' },
+            { time: '3個月內', text: '執行內部提案並密切觀察組織的變革誠意與落實程度。' },
+            { time: '6個月內', text: '若組織慣性無法打破，正式啟動轉職佈局，尋求契合度更高的舞台。' },
+          ],
+          4: [
+            { time: '1個月內', text: '針對次弱勢維度，主動爭取跨部門資源或專案以補齊短板。' },
+            { time: '3個月內', text: '著手強化個人品牌影響力，參與具備市場前瞻性的外部培訓。' },
+            { time: '6個月內', text: '維持履歷活躍度，保持對高端獵頭的開放態度，掌握主動權。' },
+          ],
+          5: [
+            { time: '1個月內', text: '鞏固核心護城河，將高質量的輸出轉化為可見的績效與影響力。' },
+            { time: '3個月內', text: '挑戰更高階的領導角色，或主導具備戰略意義的創新專案。' },
+            { time: '6個月內', text: '耐心等待能帶來指數級躍升的跨界或躍層機遇，不輕易降級轉換。' },
+          ],
+        };
+
+        let timelineHtml = '';
+        plans[level.id].forEach((p) => {
+          timelineHtml += `
+          <div class="action-item">
+            <div class="action-time">${p.time}</div>
+            <div class="action-desc">${p.text}</div>
+          </div>
+        `;
+        });
+        document.getElementById('timeline-container').innerHTML = timelineHtml;
+      }
+
+      function renderRadarChart(scores) {
+        const size = 300;
+        const center = size / 2;
+        const radius = 100;
+        let svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`;
+
+        // Grids
+        for (let i = 5; i >= 1; i--) {
+          let r = (i / 5) * radius;
+          let points = '';
+          for (let j = 0; j < 5; j++) {
+            let angle = (Math.PI * 2 * j) / 5 - Math.PI / 2;
+            let x = center + r * Math.cos(angle);
+            let y = center + r * Math.sin(angle);
+            points += `${x},${y} `;
+          }
+          svg += `<polygon points="${points}" fill="none" stroke="#E2E8F0" stroke-width="1"/>`;
+        }
+
+        const keys = Object.keys(dimensionsData);
+        let dataPoints = '';
+
+        keys.forEach((key, j) => {
+          let angle = (Math.PI * 2 * j) / 5 - Math.PI / 2;
+          let edgeX = center + radius * Math.cos(angle);
+          let edgeY = center + radius * Math.sin(angle);
+          svg += `<line x1="${center}" y1="${center}" x2="${edgeX}" y2="${edgeY}" stroke="#E2E8F0" stroke-width="1"/>`;
+
+          let labelX = center + (radius + 28) * Math.cos(angle);
+          let labelY = center + (radius + 15) * Math.sin(angle);
+          svg += `<text x="${labelX}" y="${labelY}" text-anchor="middle" dominant-baseline="middle" font-size="12" font-family="'Noto Sans TC', sans-serif" font-weight="bold" fill="#64748B">${dimensionsData[key].name}</text>`;
+
+          let scorePct = scores[key] / 100;
+          let px = center + radius * scorePct * Math.cos(angle);
+          let py = center + radius * scorePct * Math.sin(angle);
+          dataPoints += `${px},${py} `;
+        });
+
+        svg += `<polygon points="${dataPoints}" fill="rgba(197, 160, 89, 0.2)" stroke="#C5A059" stroke-width="2"/>`;
+
+        keys.forEach((key, j) => {
+          let angle = (Math.PI * 2 * j) / 5 - Math.PI / 2;
+          let scorePct = scores[key] / 100;
+          let px = center + radius * scorePct * Math.cos(angle);
+          let py = center + radius * scorePct * Math.sin(angle);
+          svg += `<circle cx="${px}" cy="${py}" r="4" fill="#C5A059"/>`;
+        });
+
+        svg += `</svg>`;
+        document.getElementById('radar-container').innerHTML = svg;
+      }
+
+      function restartQuiz() {
+        localStorage.removeItem(STORAGE_KEY);
+        answers = new Array(12).fill(null);
+        currentQ = 0;
+        document.getElementById('view-results').classList.remove('active');
+        document.getElementById('view-hero').classList.add('active');
+      }
+    </script>
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
