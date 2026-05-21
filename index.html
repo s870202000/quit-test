@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW" data-theme="light">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,149 +9,133 @@
 
     <style>
         :root {
-            --primary: #0F172A !important;     /* 午夜深藍 */
-            --accent: #C5A059 !important;      /* 雅致卡其金 */
-            --bg-light: #F8FAFC !important;    /* 極簡白 */
+            --primary: #0F172A;
+            --accent: #C5A059;
+            --bg-light: #F8FAFC;
             --font-vogue: 'Playfair Display', 'Noto Serif TC', serif;
             --font-body: 'Montserrat', 'Noto Sans TC', sans-serif;
         }
 
-        /* 強制移除外部框架干擾 */
-        html, body { background-color: var(--primary) !important; color: white; }
+        /* 全域樣式 */
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            font-family: var(--font-body);
-            font-weight: 300;
-            line-height: 1.8;
-            letter-spacing: 0.05em;
+        html, body { background-color: var(--primary) !important; color: white; min-height: 100vh; }
+        body { font-family: var(--font-body); font-weight: 300; line-height: 1.6; letter-spacing: 0.05em; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; text-align: center; }
+
+        /* 首頁設計：修復重疊問題 */
+        .hero-section {
+            padding: 80px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            background: linear-gradient(180deg, rgba(15,23,42,1) 0%, rgba(26,39,68,1) 100%);
         }
 
-        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; background-color: var(--primary) !important; }
-
-        h1, h2, h3 {
+        .hero-sub { font-size: 0.8rem; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+        
+        .hero-title {
             font-family: var(--font-vogue);
+            font-size: clamp(2.5rem, 8vw, 3.5rem);
             font-style: italic;
             color: var(--accent) !important;
-            letter-spacing: -0.02em;
-            text-transform: uppercase;
-        }
-
-        .hero-section {
-            background: linear-gradient(135deg, #0F172A 0%, #1a2744 100%) !important;
-            color: white !important;
-            padding: 100px 40px;
-            text-align: center;
-            border: 1px solid rgba(197, 160, 89, 0.2);
-            margin-bottom: 50px;
-        }
-
-        .hero-title {
-            font-size: 3.5rem;
-            color: var(--accent) !important;
-            margin-bottom: 30px;
-            border-bottom: 1px solid rgba(197, 160, 89, 0.5);
-            display: inline-block;
-            padding-bottom: 15px;
+            line-height: 1.2;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.3);
         }
 
         .btn-vogue {
-            background: none !important;
-            border: 1px solid var(--accent) !important;
-            color: var(--accent) !important;
-            padding: 15px 40px;
-            text-transform: uppercase;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 16px 48px;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
             letter-spacing: 0.3em;
+            text-transform: uppercase;
             cursor: pointer;
             transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .btn-vogue:hover { background: var(--accent) !important; color: var(--primary) !important; }
+        .btn-vogue:hover { background: var(--accent); color: var(--primary); box-shadow: 0 0 20px rgba(197, 160, 89, 0.4); }
 
-        .quiz-card {
-            background: white !important;
-            color: var(--primary) !important;
-            padding: 50px 40px;
-            border-left: 5px solid var(--accent) !important;
-            margin-bottom: 30px;
-        }
-
-        .option-btn {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            margin-bottom: 12px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            text-align: left;
-            font-family: var(--font-body);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .option-btn:hover { border-color: var(--accent); color: var(--accent); padding-left: 25px; }
-
-        /* 結果報告區：深藍底金色字 */
-        .view-section { display: none; background-color: var(--primary) !important; }
+        /* 測驗卡片 */
+        .view-section { display: none; }
         .view-section.active { display: block; }
 
-        .score-circle { 
-            font-size: 80px; 
-            font-family: var(--font-vogue); 
-            color: var(--accent) !important; 
-            margin: 20px 0; 
-            font-weight: 700; 
+        .quiz-card {
+            background: white;
+            color: var(--primary);
+            padding: 40px 30px;
+            text-align: left;
+            margin-top: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-left: 6px solid var(--accent);
         }
 
-        .bar-bg { height: 4px; background: rgba(255,255,255,0.1); width: 100%; position: relative; margin-top: 10px; }
-        .bar-fill { height: 100%; background: var(--accent) !important; transition: width 1.5s ease; }
-        .dimension-label { color: white !important; font-size: 0.8rem; display: flex; justify-content: space-between; text-transform: uppercase; }
+        .quiz-q { font-family: var(--font-body); font-size: 1.2rem; font-weight: 400; margin-bottom: 30px; color: var(--primary); }
+
+        .option-btn {
+            display: block; width: 100%; padding: 18px; margin-bottom: 12px;
+            border: 1px solid #e2e8f0; background: white; text-align: left;
+            font-family: var(--font-body); font-size: 0.95rem; cursor: pointer; transition: all 0.3s ease;
+        }
+        .option-btn:hover { border-color: var(--accent); color: var(--accent); padding-left: 25px; }
+
+        /* 結果頁 */
+        .score-circle { font-size: 90px; font-family: var(--font-vogue); color: var(--accent); font-weight: 700; margin: 20px 0; }
+        .dimension-row { margin-bottom: 30px; text-align: left; }
+        .dimension-label { font-size: 0.75rem; color: rgba(255,255,255,0.7); display: flex; justify-content: space-between; margin-bottom: 8px; letter-spacing: 0.1em; }
+        .bar-bg { height: 2px; background: rgba(255,255,255,0.1); width: 100%; }
+        .bar-fill { height: 100%; background: var(--accent); transition: width 1.5s ease; }
 
         .vip-invite {
-            background: rgba(197, 160, 89, 0.05);
-            border: 1px solid var(--accent);
-            padding: 50px;
-            color: white;
-            text-align: center;
-            margin-top: 80px;
+            margin-top: 60px; padding: 40px; border: 1px solid var(--accent); background: rgba(197, 160, 89, 0.03);
         }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <!-- 1. Welcome -->
     <div id="view-welcome" class="view-section active">
         <div class="hero-section">
+            <div class="hero-sub">Vogue Career Assessment</div>
             <h1 class="hero-title">重塑你的職涯邊際</h1>
-            <p style="margin-bottom: 40px; color: rgba(255,255,255,0.7)">VOGUE EXECUTIVE CAREER ASSESSMENT</p>
             <button class="btn-vogue" onclick="startQuiz()">開啟專屬評鑑</button>
         </div>
     </div>
 
-    <div id="view-quiz" class="view-section" style="background:transparent !important;">
-        <div id="progress-text" style="color: var(--accent); letter-spacing: 3px; margin-bottom: 10px;">INDICATOR 01/12</div>
+    <!-- 2. Quiz -->
+    <div id="view-quiz" class="view-section">
+        <div id="indicator" style="color: var(--accent); letter-spacing: 4px; font-size: 12px; margin-bottom: 10px;">INDICATOR 01/12</div>
         <div class="quiz-card">
-            <h2 id="question-text" style="margin-bottom: 30px; font-style: normal; color: var(--primary) !important;">載入中...</h2>
-            <div id="options-container"></div>
-            <button id="prev-btn" style="background:none; border:none; color:#a0aec0; cursor:pointer; text-decoration:underline; margin-top:20px; display:none;" onclick="prevQuestion()">PREVIOUS</button>
+            <div id="q-text" class="quiz-q">載入題目中...</div>
+            <div id="options"></div>
+            <a href="javascript:prev()" id="prev-link" style="color: #cbd5e1; font-size: 11px; margin-top: 20px; display: inline-block; text-decoration: underline;">上一題 PREVIOUS</a>
         </div>
     </div>
 
+    <!-- 3. Result -->
     <div id="view-result" class="view-section">
-        <div style="text-align: center; margin-bottom: 60px;">
-            <h3 style="letter-spacing: 5px; color: white !important;">Career Health Index</h3>
-            <div class="score-circle" id="total-score">0</div>
-            <p id="result-status" style="color: var(--accent) !important; letter-spacing: 3px; font-weight: 600;"></p>
-            <p id="result-desc" style="color: white; margin-top: 20px; opacity: 0.8;"></p>
-        </div>
-        <div id="dimension-analysis"></div>
+        <h4 style="letter-spacing: 6px; font-weight: 300; font-size: 14px; opacity: 0.6;">CAREER HEALTH INDEX</h4>
+        <div class="score-circle" id="total-score">0</div>
+        <div id="res-status" style="color: var(--accent); font-size: 1.2rem; letter-spacing: 3px; margin-bottom: 20px;">分析中...</div>
+        <p id="res-desc" style="max-width: 500px; margin: 0 auto 50px; opacity: 0.7; font-size: 0.95rem;"></p>
+        
+        <div id="analysis-box"></div>
+
         <div class="vip-invite">
-            <h2 style="color: var(--accent); margin-bottom: 20px;">專屬顧問預約</h2>
-            <button class="btn-vogue" style="background: var(--accent) !important; color: var(--primary) !important;" onclick="window.location.href='https://lin.ee/xxxxxxxxxx'">立即預約晤談</button>
+            <h2 style="font-family: var(--font-vogue); color: var(--accent); margin-bottom: 20px; font-style: italic;">專屬職涯顧問晤談</h2>
+            <p style="margin-bottom: 30px; font-size: 0.9rem; opacity: 0.7;">針對您的數據結果，進行深度一對一策略佈局。</p>
+            <button class="btn-vogue" style="background: var(--accent); color: var(--primary);" onclick="window.location.href='https://lin.ee/xxxxxxxxxx'">立即預約</button>
         </div>
-        <p style="text-align: center; margin-top: 40px;">
-            <a href="javascript:location.reload()" style="color: var(--accent); text-decoration: none; font-size: 12px; letter-spacing: 2px;">RE-ASSESSMENT</a>
-        </p>
+        <p style="margin-top: 50px;"><a href="javascript:location.reload()" style="color: rgba(255,255,255,0.3); font-size: 11px; letter-spacing: 2px; text-decoration: none;">RE-START ASSESSMENT</a></p>
     </div>
 </div>
 
@@ -165,85 +149,5 @@
         { q: "你和直屬主管的相處如何？", d: "人際關係" },
         { q: "公司同事願意互相支持嗎？", d: "人際關係" },
         { q: "你在公司的存在感和認同感如何？", d: "人際關係" },
-        { q: "你認為這份工作有意義嗎？", d: "工作意義" },
-        { q: "你的價值觀和公司文化契合嗎？", d: "工作意義" },
-        { q: "回顧近一個月，工作是否讓你感到焦慮或沮喪？", d: "身心健康", isNeg: true },
-        { q: "工作是否已經影響到你的睡眠或生活品質？", d: "身心健康", isNeg: true }
-    ];
-
-    let currentStep = 0;
-    let answers = [];
-
-    function startQuiz() {
-        document.getElementById('view-welcome').style.display = 'none';
-        document.getElementById('view-quiz').classList.add('active');
-        showQuestion();
-    }
-
-    function showQuestion() {
-        const q = questions[currentStep];
-        document.getElementById('progress-text').innerText = `INDICATOR ${String(currentStep + 1).padStart(2, '0')}/12`;
-        document.getElementById('question-text').innerText = q.q;
-        document.getElementById('prev-btn').style.display = currentStep > 0 ? 'block' : 'none';
-        
-        const container = document.getElementById('options-container');
-        container.innerHTML = '';
-        
-        const opts = q.isNeg 
-            ? ["5分：完全沒影響 / 狀態極佳", "4分：影響輕微 / 偶爾焦慮", "3分：普通 / 中立", "2分：影響明顯 / 經常焦慮", "1分：影響嚴重 / 極度焦慮"]
-            : ["5分：非常滿意 / 完全同意", "4分：滿意 / 同意", "3分：普通 / 中立", "2分：不滿意 / 不同意", "1分：非常不滿意 / 完全不同意"];
-
-        opts.forEach((text, i) => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.innerText = text;
-            btn.onclick = () => nextStep(5 - i);
-            container.appendChild(btn);
-        });
-    }
-
-    function nextStep(score) {
-        answers[currentStep] = score;
-        currentStep++;
-        if (currentStep < questions.length) { showQuestion(); } else { showResult(); }
-    }
-
-    function prevQuestion() { currentStep--; showQuestion(); }
-
-    function showResult() {
-        document.getElementById('view-quiz').style.display = 'none';
-        document.getElementById('view-result').classList.add('active');
-        const totalRaw = answers.reduce((a, b) => a + b, 0);
-        const finalScore = Math.round((totalRaw / 60) * 100);
-        document.getElementById('total-score').innerText = finalScore;
-        
-        let status = "";
-        let desc = "";
-        if (finalScore >= 74) { status = "✅ 綠燈暢行"; desc = "恭喜！你處於理想的職場狀態。維持現狀並持續成長。"; }
-        else if (finalScore >= 61) { status = "🟢 黃綠燈"; desc = "狀態基本健康，仍有優化空間。建議持續關注弱勢維度。"; }
-        else if (finalScore >= 47) { status = "🟡 紅黃燈"; desc = "處於需要關注的灰色地帶。建議設定3個月觀察期。"; }
-        else if (finalScore >= 34) { status = "🟠 警鈴響起"; desc = "多項指標亮起紅燈。建議開始評估外部機會。"; }
-        else { status = "🔴 立即行動"; desc = "職場狀況需要立即改變。建議即刻開始求職行動。"; }
-        
-        document.getElementById('result-status').innerText = status;
-        document.getElementById('result-desc').innerText = desc;
-
-        const dimensions = ["金錢回報", "發展前景", "人際關係", "工作意義", "身心健康"];
-        const dScores = [ (answers[0]+answers[1]), (answers[2]+answers[3]+answers[4]), (answers[5]+answers[6]+answers[7]), (answers[8]+answers[9]), (answers[10]+answers[11]) ];
-        const dMax = [10, 15, 15, 10, 10];
-        const analysisContainer = document.getElementById('dimension-analysis');
-        analysisContainer.innerHTML = '<h4 style="margin-bottom:30px; text-align:center; color:white; letter-spacing:3px;">DIMENSIONAL ANALYSIS</h4>';
-        
-        dimensions.forEach((d, i) => {
-            const pct = Math.round((dScores[i] / dMax[i]) * 100);
-            analysisContainer.innerHTML += `
-                <div class="dimension-bar-container">
-                    <div class="dimension-label"><span>${d}</span><span>${pct}%</span></div>
-                    <div class="bar-bg"><div class="bar-fill" style="width: ${pct}%"></div></div>
-                </div>`;
-        });
-    }
-</script>
-</body>
-</html>
+        { q: "你認為這份<span class="cursor">█</span>
 
