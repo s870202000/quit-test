@@ -22,7 +22,7 @@
 
         .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; text-align: center; }
 
-        /* 首頁設計：確保點擊有效 */
+        /* 首頁設計 */
         .hero-section {
             padding: 80px 20px;
             display: flex; flex-direction: column; align-items: center;
@@ -32,10 +32,7 @@
             z-index: 10;
         }
         
-        .hero-sub { 
-            font-size: 0.8rem; letter-spacing: 0.4em; text-transform: uppercase; 
-            color: var(--accent); margin-bottom: 20px; font-weight: 600;
-        }
+        .hero-sub { font-size: 0.8rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; font-weight: 600; }
         
         .hero-title {
             font-family: var(--font-heading); font-size: clamp(2rem, 7vw, 3rem); font-style: italic;
@@ -73,8 +70,7 @@
         .bar-bg { height: 2px; background: rgba(255,255,255,0.1); width: 100%; }
         .bar-fill { height: 100%; background: var(--accent); transition: width 1.5s ease; }
 
-        .unlock-box { margin-top: 60px; padding: 40px; border: 2px dashed var(--accent); text-align: center; }
-        .blur-text { filter: blur(4px); opacity: 0.5; user-select: none; }
+        /* VIP 區塊 */
         .vip-invite { margin-top: 40px; padding: 40px; border: 1px solid var(--accent); background: rgba(197, 160, 89, 0.05); }
     </style>
 </head>
@@ -86,7 +82,7 @@
         <div class="hero-section">
             <div class="hero-sub">Career Pivot Assessment</div>
             <h1 class="hero-title">你的職涯該轉換了嗎？<br>測驗你想離職的程度</h1>
-            <button class="btn-vogue" id="start-btn" onclick="startQuiz()">開啟專屬評鑑</button>
+            <button class="btn-vogue" onclick="startQuiz()">開啟專屬評鑑</button>
         </div>
     </div>
 
@@ -95,7 +91,7 @@
         <div id="indicator" style="color: rgba(255,255,255,0.4); letter-spacing: 4px; font-size: 10px; margin-bottom: 5px;">INDICATOR 01/12</div>
         <div id="tag" class="dimension-tag"></div>
         <div class="quiz-card">
-            <div id="q-text" style="font-size: 1.1rem; margin-bottom: 30px; font-weight: 400;">載入題目中...</div>
+            <div id="q-text" style="font-size: 1.1rem; margin-bottom: 30px;">載入題目中...</div>
             <div id="options"></div>
         </div>
     </div>
@@ -113,17 +109,19 @@
             <ul id="pain-points" style="list-style: none; opacity: 0.8; font-size: 0.95rem; line-height: 2;"></ul>
         </div>
 
-        <div class="unlock-box">
-            <div class="report-label" style="border:none;">深度行業標竿對比分析</div>
-            <p class="blur-text">根據數據顯示，您的現有職位在同產業中處於前 15% 分位數。您的潛在跳槽溢價空間極大...</p>
-            <p style="margin: 20px 0; font-size: 0.85rem; color: var(--accent);">解鎖完整 15 頁深度策略報告</p>
-            <button class="btn-vogue" style="padding: 10px 30px; font-size: 0.75rem;" onclick="window.location.href='https://lin.ee/xxxxxxxxxx'">付費解鎖完整報告</button>
+        <!-- 深度建議區（原付費區已改為直接顯示） -->
+        <div class="report-block" style="border-style: solid; border-width: 2px;">
+            <div class="report-label">深度行業標竿對比 / Strategic Benchmarking</div>
+            <p id="benchmarking-text" style="font-size: 0.95rem; opacity: 0.9; line-height: 1.8;"></p>
         </div>
 
         <div class="vip-invite">
             <h2 style="font-family: var(--font-heading); color: var(--accent); margin-bottom: 20px; font-style: italic;">專屬職涯顧問晤談</h2>
-            <button class="btn-vogue" style="background: var(--accent) !important; color: var(--primary) !important;" onclick="window.location.href='https://lin.ee/xxxxxxxxxx'">立即預約</button>
+            <p style="margin-bottom: 30px; font-size: 0.9rem; opacity: 0.8;">對於評估結果有進一步疑問？歡迎私訊 Threads 進行深度交流。</p>
+            <button class="btn-vogue" style="background: var(--accent) !important; color: var(--primary) !important;" onclick="window.location.href='https://www.threads.net/@s870202000?hl=zh-tw'">立即預約晤談</button>
         </div>
+        
+        <p style="margin-top: 50px;"><a href="javascript:location.reload()" style="color: rgba(255,255,255,0.2); font-size: 11px; text-decoration: none;">RE-START ASSESSMENT</a></p>
     </div>
 </div>
 
@@ -180,9 +178,20 @@
         document.getElementById('total-score').innerText = score;
         
         const badge = document.getElementById('risk-badge');
-        if(score >= 74) { badge.innerText = "低離職風險 / Stable"; badge.className = "risk-badge risk-low"; }
-        else if(score >= 47) { badge.innerText = "中度風險 / Potential Exit"; badge.className = "risk-badge risk-mid"; }
-        else { badge.innerText = "極高風險 / Immediate Exit"; badge.className = "risk-badge risk-high"; }
+        let benchmark = "";
+
+        if(score >= 74) { 
+            badge.innerText = "低離職風險 / Stable"; badge.className = "risk-badge risk-low"; 
+            benchmark = "根據您的職位回報率分析，您目前的職涯價值在同行業中處於前 10% 分位。建議採取『鞏固優勢』策略，而非轉換環境。您的內部溢價空間仍有 15%-20%。";
+        } else if(score >= 47) { 
+            badge.innerText = "中度風險 / Potential Exit"; badge.className = "risk-badge risk-mid"; 
+            benchmark = "您的職位競爭力處於行業平均水平。數據顯示，若現在進行同質性跳槽，預期薪資漲幅約在 10%-15% 之間。建議優先修補目前得分最低的維度。";
+        } else { 
+            badge.innerText = "極高風險 / Immediate Exit"; badge.className = "risk-badge risk-high"; 
+            benchmark = "強烈預警：您的職涯資本正在快速侵蝕。當前市場對該維度的需求極高，若能成功重塑定位，跳槽後的預期成長空間可達 30% 以上。建議即刻規劃撤離路徑。";
+        }
+
+        document.getElementById('benchmarking-text').innerText = benchmark;
 
         const dims = ["金錢回報", "發展前景", "人際關係", "工作意義", "身心健康"];
         const dIdx = [[0,1], [2,3,4], [5,6,7], [8,9], [10,11]];
@@ -200,11 +209,10 @@
 
         const sortedDims = [...dimResults].sort((a,b) => a.score - b.score);
         document.getElementById('pain-points').innerHTML = `
-            <li>⚡ 優先痛點：${sortedDims[0].name} (${sortedDims[0].score}%) - 這是您目前職涯最不穩定的核心因素。</li>
-            <li>⚡ 次要威脅：${sortedDims[1].name} (${sortedDims[1].score}%) - 該領域正持續消耗您的職場熱情。</li>
+            <li>⚡ 優先痛點：${sortedDims[0].name} (${sortedDims[0].score}%) - 這是您目前職涯最脆弱的環節。</li>
+            <li>⚡ 次要威脅：${sortedDims[1].name} (${sortedDims[1].score}%) - 該指標正嚴重拖累您的整體滿意度。</li>
         `;
     }
 </script>
 </body>
 </html>
-
